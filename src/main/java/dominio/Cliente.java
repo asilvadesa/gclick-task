@@ -1,19 +1,34 @@
 package dominio;
 
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Cliente implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
-    private String inscricao;
-    private List<String> contatos;
 
-    public Cliente(String inscricao) {
+    @Column(nullable = false)
+    private Boolean inscricao;
+
+    @ElementCollection
+    private List<String> contatos = new ArrayList<String>();
+
+    public Cliente(Boolean inscricao) {
         this.inscricao = inscricao;
+    }
+
+    public Cliente(String nome, Boolean inscricao, List<String> contatos) {
+        this.nome = nome;
+        this.inscricao = inscricao;
+        this.contatos = contatos;
     }
 
     public Integer getId() {
@@ -32,11 +47,11 @@ public class Cliente implements Serializable {
         this.nome = nome;
     }
 
-    public String getInscricao() {
+    public Boolean getInscricao() {
         return inscricao;
     }
 
-    public void setInscricao(String inscricao) {
+    public void setInscricao(Boolean inscricao) {
         this.inscricao = inscricao;
     }
 
