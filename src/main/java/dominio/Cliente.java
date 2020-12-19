@@ -21,6 +21,9 @@ public class Cliente implements Serializable {
     @ElementCollection
     private List<String> contatos = new ArrayList<String>();
 
+    public Cliente (){
+    }
+
     public Cliente(Boolean inscricao) {
         this.inscricao = inscricao;
     }
@@ -33,10 +36,6 @@ public class Cliente implements Serializable {
 
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getNome() {
