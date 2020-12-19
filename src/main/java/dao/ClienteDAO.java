@@ -22,8 +22,7 @@ public class ClienteDAO {
         }
     }
 
-    public ClienteDAO(Cliente cliente) {
-        this.cliente = cliente;
+    public ClienteDAO() {
         manager = factory.createEntityManager();
     }
 
@@ -50,22 +49,26 @@ public class ClienteDAO {
         return manager.find(Cliente.class, id);
     }
 
-    public void remover(Cliente cliente){
+    public boolean removerPorId(Integer id){
         try {
-            Cliente c1 = this.abrirT().buscaPorId(cliente.getId());
-            manager.remove(c1);
+            Cliente clienteBancoDeDados = this.abrirT().buscaPorId(id);
+            manager.remove(clienteBancoDeDados);
             this.fecharT();
+            return true;
         } catch (Exception e){
             manager.getTransaction().rollback();
+            return false;
         }
     }
 
     public Cliente atualizar(Integer id, Cliente cliente){
         try{
-            Cliente c1 = buscaPorId(id);
-            abrirT();
-            manager.persist(cliente);
-            return c1;
+            Cliente clienteBancoDeDados = buscaPorId(id);
+            clienteBancoDeDados.setNome(cliente.getNome());
+            clienteBancoDeDados.setContatos(cliente.getContatos());
+            clienteBancoDeDados.setInscricao(cliente.getInscricao());
+            cadastrar(clienteBancoDeDados);
+            return clienteBancoDeDados;
         }catch (Exception e){
             throw new RuntimeException("Cliente não identificado");
         }
