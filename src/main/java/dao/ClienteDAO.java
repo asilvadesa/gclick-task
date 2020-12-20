@@ -1,18 +1,16 @@
 package dao;
 
 import dominio.Cliente;
+import execeptions.UsuarioNaoEncontradoExecption;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-import java.util.List;
 
 public class ClienteDAO {
 
     private static EntityManagerFactory factory;
     private EntityManager manager;
-    private Cliente cliente;
 
     static {
         try{
@@ -36,13 +34,17 @@ public class ClienteDAO {
         return this;
     }
 
-    private ClienteDAO incluir(Cliente cliente){
+    private ClienteDAO incluir(Cliente cliente) {
         manager.persist(cliente);
         return this;
     }
 
     public ClienteDAO cadastrar(Cliente cliente) {
-        return this.abrirT().incluir(cliente).fecharT();
+        try {
+            return this.abrirT().incluir(cliente).fecharT();
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public Cliente buscaPorId(Integer id){
@@ -70,7 +72,7 @@ public class ClienteDAO {
             cadastrar(clienteBancoDeDados);
             return clienteBancoDeDados;
         }catch (Exception e){
-            throw new RuntimeException("Cliente não identificado");
+            throw new UsuarioNaoEncontradoExecption();
         }
     }
 }
